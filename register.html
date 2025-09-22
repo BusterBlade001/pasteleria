@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Pastelería Mil Sabores</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="img/Logo.png" alt="Pastelería Mil Sabores Logo">
+            </a>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="index.html#catalogo">Catálogo</a></li>
+                <li><a href="index.html#nosotros">Nuestra Historia</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+                <li><a href="login-coming-soon.html" class="btn-login">Iniciar Sesión</a></li>
+                <li><a href="register.html" class="btn-register">Registrarse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="registration-form" class="container">
+            <h2 class="section-title">Crea tu Cuenta</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="name">Nombre Completo:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">Fecha de Nacimiento:</label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="duoc-student" name="duoc-student">
+                    <label for="duoc-student">Soy estudiante de Duoc UC</label>
+                </div>
+                <div class="form-group">
+                    <label for="discount-code">Código de Descuento:</label>
+                    <input type="text" id="discount-code" name="discount-code" placeholder="Ej: FELICES50">
+                </div>
+                <button type="submit" class="btn-submit">Registrarse</button>
+            </form>
+            <div id="registration-message"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Pastelería Mil Sabores. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="js/register.js"></script>
+</body>
+</html>
