@@ -19,6 +19,8 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
         age--;
     }
 
+    const isAdmin = email === 'admin@pasteleria.cl';
+
     let message = `¡Bienvenido, ${name}! Tu registro ha sido exitoso.`;
     
     if (age >= 50) {
@@ -34,12 +36,10 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
     registrationMessage.textContent = message;
     registrationMessage.classList.add('success');
 
-    console.log({
-        name,
-        email,
-        birthdate,
-        isDuocStudent,
-        discountCode,
-        age
-    });
+    // Simular inicio de sesión
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('currentUser', JSON.stringify({ name, email, birthdate }));
+
+    // Redireccionar al index para ver el cambio en la navegación
+    window.location.href = 'index.html';
 });

@@ -29,7 +29,7 @@ h1, h2, h3 {
 }
 
 .header .logo img {
-    height: 150px;
+    height: 50px;
 }
 
 .navbar ul {
@@ -51,7 +51,7 @@ h1, h2, h3 {
     color: var(--rosa-suave);
 }
 
-.btn-login, .btn-register, .btn-profile {
+.btn-login, .btn-register, .btn-profile, .btn-public-site {
     background-color: var(--chocolate);
     color: white;
     padding: 0.5rem 1rem;
@@ -350,4 +350,89 @@ h1, h2, h3 {
     display: inline-block;
     width: auto;
     margin-top: 2rem;
+}
+
+/* Nuevos estilos para el Panel de Administración */
+.admin-main {
+    display: flex;
+    min-height: calc(100vh - 120px); /* Ajusta la altura para el header y footer */
+}
+
+.admin-sidebar {
+    width: 250px;
+    background-color: #f7f3ed;
+    padding: 2rem 1rem;
+    border-right: 1px solid #ddd;
+}
+
+.admin-title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-menu li {
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.admin-menu li:hover, .admin-menu li.active {
+    background-color: var(--crema-pastel);
+}
+
+.admin-content {
+    flex-grow: 1;
+    padding: 2rem;
+}
+
+.controls {
+    text-align: right;
+    margin-bottom: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: var(--chocolate);
+    color: white;
+}
+
+.action-buttons button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.edit-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
 }

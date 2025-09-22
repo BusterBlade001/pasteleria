@@ -76,7 +76,6 @@ function filterAndSearchProducts() {
 document.getElementById('category-filter').addEventListener('change', filterAndSearchProducts);
 document.getElementById('search-input').addEventListener('input', filterAndSearchProducts);
 
-
 function generateTrackingNumber() {
     return 'PS-' + Math.floor(10000000 + Math.random() * 90000000);
 }
@@ -122,7 +121,33 @@ document.getElementById('share-btn').addEventListener('click', () => {
     }
 });
 
+function toggleProfileButton() {
+    const user = JSON.parse(localStorage.getItem('currentUser')) || {};
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const isAdmin = user.email === 'admin@pasteleria.cl';
+    
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const profileLink = document.getElementById('profile-link');
+    const adminLink = document.getElementById('admin-link');
+
+    if (isLoggedIn) {
+        loginBtn.style.display = 'none';
+        registerBtn.style.display = 'none';
+        profileLink.style.display = 'list-item'; 
+        if (isAdmin) {
+            adminLink.style.display = 'list-item';
+        }
+    } else {
+        loginBtn.style.display = 'list-item';
+        registerBtn.style.display = 'list-item';
+        profileLink.style.display = 'none';
+        adminLink.style.display = 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     updateCart();
+    toggleProfileButton();
 });
