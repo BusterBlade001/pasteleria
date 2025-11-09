@@ -28,11 +28,6 @@
         
         <nav class="navbar right-nav">
             <div class="search-and-icons">
-                <div class="search-bar">
-                    <input type="text" id="header-search-input" placeholder="Buscar producto" class="search-input-header">
-                    <button class="search-icon">🔍</button>
-                </div>
-
                 <div class="user-icons">
                     <a href="profile.html" id="header-profile-icon" class="icon-link icon-profile" style="display: none;">👤</a>
                     <a href="login-coming-soon.html" id="header-login-icon" class="icon-link icon-profile">👤</a>
@@ -72,6 +67,7 @@
         <section id="catalogo" class="container">
             <h2 class="section-title">Nuestro Catálogo</h2>
             <div class="filters">
+                <input type="text" id="search-input" placeholder="Buscar por nombre...">
                 <select id="category-filter">
                     <option value="">Todas las Categorías</option>
                     <option value="Tortas Cuadradas">Tortas Cuadradas</option>
@@ -105,13 +101,7 @@
             </div>
         </div>
 
-        <section id="content-links" class="container" style="display: flex; justify-content: space-around; margin-top: 5rem;">
-            <a href="nosotros.html" class="btn-read-more" style="width: 30%; text-align: center;">Conoce Nuestra Historia</a>
-            <a href="blog.html" class="btn-read-more" style="width: 30%; text-align: center;">Visita el Blog y la Comunidad</a>
-            <a href="comunidad.html" class="btn-read-more" style="width: 30%; text-align: center;">Ver Impacto Comunitario y Recetas</a>
-        </section>
-
-    </main>
+        </main>
 
     <footer class="footer">
         <p>&copy; 2025 Pastelería Mil Sabores. Todos los derechos reservados.</p>

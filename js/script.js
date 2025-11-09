@@ -82,8 +82,8 @@ function removeItemFromCart(code, personalization) {
 
 
 function filterAndSearchProducts() {
-    // Verificar que los elementos de filtrado existan (solo existen en index.html)
-    const searchInput = document.getElementById('header-search-input');
+    // CAMBIO AQUÍ: Usamos el nuevo ID #search-input
+    const searchInput = document.getElementById('search-input');
     const categoryFilter = document.getElementById('category-filter');
     if (!searchInput || !categoryFilter) return;
 
@@ -100,12 +100,13 @@ function filterAndSearchProducts() {
     renderProducts(filtered);
 }
 
-// Solo añadir listeners si los elementos existen (para evitar errores en product-detail.html)
+// Listener de filtrado y búsqueda reubicados en DOMContentLoaded para ser más limpios
 if (document.getElementById('category-filter')) {
     document.getElementById('category-filter').addEventListener('change', filterAndSearchProducts);
 }
-if (document.getElementById('header-search-input')) {
-    document.getElementById('header-search-input').addEventListener('input', filterAndSearchProducts);
+// CAMBIO AQUÍ: Usamos el nuevo ID para el listener de la caja de búsqueda del catálogo
+if (document.getElementById('search-input')) {
+    document.getElementById('search-input').addEventListener('input', filterAndSearchProducts);
 }
 
 
