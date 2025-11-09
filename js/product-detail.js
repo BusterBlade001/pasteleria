@@ -73,6 +73,11 @@ function renderProductDetail() {
         
         localStorage.setItem('cart', JSON.stringify(cart));
         alert(`${product.name} ha sido añadido al carrito.`);
+        
+        // Llamada a la función global para actualizar el modal de carrito.
+        if (typeof updateCart === 'function') {
+            updateCart();
+        }
     });
     
     document.getElementById('share-product-btn').addEventListener('click', () => {

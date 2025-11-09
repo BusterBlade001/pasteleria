@@ -19,6 +19,9 @@ const products = [
 
 function renderProducts(filteredProducts = products) {
     const productList = document.getElementById('product-list');
+    // Verifica que el elemento exista antes de intentar manipularlo
+    if (!productList) return; 
+    
     productList.innerHTML = '';
     filteredProducts.forEach(product => {
         const productCard = document.createElement('a');
@@ -38,15 +41,19 @@ function renderProducts(filteredProducts = products) {
 function updateCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalElement = document.getElementById('cart-total');
+    // Verifica que los elementos existan. Si no existen (ej: en otras páginas), no hagas nada.
+    if (!cartItemsContainer || !cartTotalElement) return;
+
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cartItemsContainer.innerHTML = '';
     let total = 0;
 
+    const checkoutBtn = document.getElementById('checkout-btn');
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p>El carrito está vacío.</p>';
-        document.getElementById('checkout-btn').disabled = true;
+        if (checkoutBtn) checkoutBtn.disabled = true;
     } else {
-        document.getElementById('checkout-btn').disabled = false;
+        if (checkoutBtn) checkoutBtn.disabled = false;
         cart.forEach(item => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
@@ -92,9 +99,13 @@ function removeItemFromCart(code, personalization) {
 
 
 function filterAndSearchProducts() {
-    // Usamos el input de búsqueda del header
-    const searchTerm = document.getElementById('header-search-input').value.toLowerCase();
-    const selectedCategory = document.getElementById('category-filter').value;
+    // Verificar que los elementos de filtrado existan (solo existen en index.html)
+    const searchInput = document.getElementById('header-search-input');
+    const categoryFilter = document.getElementById('category-filter');
+    if (!searchInput || !categoryFilter) return;
+
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value;
     
     const filtered = products.filter(product => {
         const matchesCategory = selectedCategory === '' || product.category === selectedCategory;
@@ -105,21 +116,54 @@ function filterAndSearchProducts() {
     renderProducts(filtered);
 }
 
-document.getElementById('category-filter').addEventListener('change', filterAndSearchProducts);
-// Listener para el input de búsqueda del header
-document.getElementById('header-search-input').addEventListener('input', filterAndSearchProducts);
+// Solo añadir listeners si los elementos existen (para evitar errores en product-detail.html)
+if (document.getElementById('category-filter')) {
+    document.getElementById('category-filter').addEventListener('change', filterAndSearchProducts);
+}
+if (document.getElementById('header-search-input')) {
+    document.getElementById('header-search-input').addEventListener('input', filterAndSearchProducts);
+}
+
 
 function generateTrackingNumber() {
     return 'PS-' + Math.floor(10000000 + Math.random() * 90000000);
 }
 
-document.getElementById('checkout-btn').addEventListener('click', () => {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    if (cart.length > 0) {
+// Añadimos el listener de checkout condicionalmente, ya que ahora existe en varias páginas.
+const checkoutBtn = document.getElementById('checkout-btn');
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const deliveryDateInput = document.getElementById('delivery-date');
+
+        if (cart.length === 0) {
+            alert('El carrito está vacío. Agrega productos para finalizar la compra.');
+            return;
+        }
+
+        // Si el input de fecha existe, validarlo
+        if (deliveryDateInput) {
+            const deliveryDate = deliveryDateInput.value;
+            if (!deliveryDate) {
+                alert('Por favor, selecciona una fecha de entrega preferida.');
+                return;
+            }
+            
+            // Validación: La fecha de entrega debe ser futura
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            
+            if (deliveryDate < todayString) {
+                alert('La fecha de entrega debe ser hoy o posterior.');
+                return;
+            }
+        }
+        
         const trackingNumber = generateTrackingNumber();
         const orderData = {
             trackingNumber: trackingNumber,
             date: new Date().toLocaleDateString('es-CL'),
+            deliveryDate: deliveryDateInput ? deliveryDateInput.value : 'No especificada', 
             status: 'Preparación',
             items: cart
         };
@@ -128,34 +172,38 @@ document.getElementById('checkout-btn').addEventListener('click', () => {
         localStorage.setItem('cart', JSON.stringify([]));
         
         // Cierra el modal y actualiza la vista
-        document.getElementById('cart-modal').style.display = 'none';
+        const cartModal = document.getElementById('cart-modal');
+        if (cartModal) cartModal.style.display = 'none';
         updateCart(); 
 
         alert(`¡Gracias por tu compra! Tu pedido ha sido confirmado. Número de seguimiento: ${trackingNumber}`);
         
         window.location.href = `track-order.html?order=${trackingNumber}`;
+    });
+}
 
-    } else {
-        alert('El carrito está vacío. Agrega productos para finalizar la compra.');
-    }
-});
 
-document.getElementById('share-btn').addEventListener('click', () => {
-    const shareUrl = window.location.href;
-    const shareText = "¡Descubre la dulzura de la vida con Pastelería Mil Sabores! Te encantarán sus tortas y postres tradicionales.";
-    
-    if (navigator.share) {
-        navigator.share({
-            title: document.title,
-            text: shareText,
-            url: shareUrl,
-        }).then(() => {
-            console.log('Contenido compartido con éxito.');
-        }).catch(console.error);
-    } else {
-        alert("¡Copia este enlace para compartir! " + shareUrl);
-    }
-});
+// Listener de compartir condicional
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+        const shareUrl = window.location.href;
+        const shareText = "¡Descubre la dulzura de la vida con Pastelería Mil Sabores! Te encantarán sus tortas y postres tradicionales.";
+        
+        if (navigator.share) {
+            navigator.share({
+                title: document.title,
+                text: shareText,
+                url: shareUrl,
+            }).then(() => {
+                console.log('Contenido compartido con éxito.');
+            }).catch(console.error);
+        } else {
+            alert("¡Copia este enlace para compartir! " + shareUrl);
+        }
+    });
+}
+
 
 function toggleProfileButton() {
     const user = JSON.parse(localStorage.getItem('currentUser')) || {};
@@ -167,18 +215,20 @@ function toggleProfileButton() {
     const profileIcon = document.getElementById('header-profile-icon');
     const adminLink = document.getElementById('admin-link');
     
-    if (isLoggedIn) {
-        loginIcon.style.display = 'none';
-        profileIcon.style.display = 'inline-flex'; 
-        if (isAdmin) {
-            adminLink.style.display = 'inline-flex';
+    if (loginIcon && profileIcon) {
+        if (isLoggedIn) {
+            loginIcon.style.display = 'none';
+            profileIcon.style.display = 'inline-flex'; 
+            if (isAdmin && adminLink) {
+                adminLink.style.display = 'inline-flex';
+            } else if (adminLink) {
+                adminLink.style.display = 'none';
+            }
         } else {
-            adminLink.style.display = 'none';
+            loginIcon.style.display = 'inline-flex';
+            profileIcon.style.display = 'none';
+            if (adminLink) adminLink.style.display = 'none';
         }
-    } else {
-        loginIcon.style.display = 'inline-flex';
-        profileIcon.style.display = 'none';
-        adminLink.style.display = 'none';
     }
 }
 
@@ -186,8 +236,11 @@ function toggleProfileButton() {
 function setupCartModal() {
     const cartModal = document.getElementById('cart-modal');
     const cartIcon = document.getElementById('header-cart-icon');
-    const closeBtn = document.querySelector('.close-btn');
+    // Aseguramos que solo seleccionamos el botón de cerrar DENTRO del modal
+    const closeBtn = document.querySelector('.cart-modal .close-btn');
 
+    if (!cartModal || !cartIcon || !closeBtn) return;
+    
     cartIcon.onclick = function() {
         updateCart(); // Asegurarse de que el carrito esté actualizado antes de mostrar
         cartModal.style.display = 'block';
@@ -205,8 +258,13 @@ function setupCartModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderProducts();
-    updateCart(); // Inicializa el carrito
-    toggleProfileButton(); // Muestra el ícono correcto
-    setupCartModal(); // Configura la funcionalidad del modal
+    // Solo llama a renderProducts si estamos en index.html (donde existe #product-list)
+    if (document.getElementById('product-list')) {
+        renderProducts();
+    }
+    
+    // Esta lógica se ejecuta en TODAS las páginas que incluyan script.js
+    toggleProfileButton(); 
+    setupCartModal(); 
+    updateCart(); // Llama a updateCart (que también es robusta)
 });
