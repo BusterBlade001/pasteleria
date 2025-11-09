@@ -91,15 +91,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add-product-btn').addEventListener('click', () => {
         const newName = prompt("Introduce el nombre del nuevo producto:");
         const newCategory = prompt("Introduce la categoría:");
-        const newPrice = prompt("Introduce el precio:");
+        const newPriceInput = prompt("Introduce el precio:");
 
+        const newPrice = parseInt(newPriceInput);
+
+        // AÑADIDO: Validación básica
+        if (!newName || !newCategory || isNaN(newPrice) || newPrice <= 0) {
+             alert('Error: Todos los campos deben ser rellenados y el precio debe ser un número positivo.');
+             return;
+        }
+        
         if (newName && newCategory && newPrice) {
             const newCode = `P${Math.floor(Math.random() * 1000)}`;
             products.push({
                 code: newCode,
                 name: newName,
                 category: newCategory,
-                price: parseInt(newPrice)
+                price: newPrice
             });
             localStorage.setItem('products', JSON.stringify(products));
             renderProducts();
@@ -122,14 +130,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const productToEdit = products.find(p => p.code === productCode);
 
             if (productToEdit) {
-                const newName = prompt("Editar nombre:", productToEdit.name);
-                const newCategory = prompt("Editar categoría:", productToEdit.category);
-                const newPrice = prompt("Editar precio:", productToEdit.price);
+                const newName = prompt("Editar nombre:", productToEdit.name)?.trim();
+                const newCategory = prompt("Editar categoría:", productToEdit.category)?.trim();
+                const newPriceInput = prompt("Editar precio:", productToEdit.price);
+                const newPrice = parseInt(newPriceInput);
+                
+                // AÑADIDO: Validación básica en edición
+                if (!newName || !newCategory || isNaN(newPrice) || newPrice <= 0) {
+                     alert('Error: Todos los campos deben ser rellenados y el precio debe ser un número positivo.');
+                     return;
+                }
 
                 if (newName !== null && newCategory !== null && newPrice !== null) {
                     productToEdit.name = newName;
                     productToEdit.category = newCategory;
-                    productToEdit.price = parseInt(newPrice);
+                    productToEdit.price = newPrice;
                     localStorage.setItem('products', JSON.stringify(products));
                     renderProducts();
                     alert('Producto actualizado con éxito.');

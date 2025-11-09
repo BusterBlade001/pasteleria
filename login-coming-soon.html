@@ -12,24 +12,40 @@
 <body>
 
     <header class="header">
+        <nav class="navbar left-nav">
+            <ul>
+                <li><a href="index.html#catalogo">Catálogo</a></li>
+                <li><a href="index.html#nosotros">Nuestra Historia</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+            </ul>
+        </nav>
+
         <div class="logo">
             <a href="index.html">
                 <img src="img/Logo.png" alt="Pastelería Mil Sabores Logo">
             </a>
         </div>
-        <nav class="navbar">
-            <ul>
-                <li><a href="index.html#catalogo">Catálogo</a></li>
-                <li><a href="index.html#nosotros">Nuestra Historia</a></li>
-                <li><a href="index.html#blog">Blog</a></li>
-                <li><a href="login-coming-soon.html" class="btn-login">Iniciar Sesión</a></li>
-                <li><a href="register.html" class="btn-register">Registrarse</a></li>
-            </ul>
+        
+        <nav class="navbar right-nav">
+            <div class="search-and-icons">
+                <div class="search-bar">
+                    <input type="text" id="header-search-input" placeholder="Buscar producto" class="search-input-header">
+                    <button class="search-icon">🔍</button>
+                </div>
+
+                <div class="user-icons">
+                    <a href="profile.html" id="header-profile-icon" class="icon-link icon-profile" style="display: none;">👤</a>
+                    <a href="login-coming-soon.html" id="header-login-icon" class="icon-link icon-profile">👤</a>
+
+                    <a href="#" id="header-cart-icon" class="icon-link icon-cart">🛒</a>
+                    
+                    <a href="admin-panel.html" id="admin-link" class="icon-link icon-admin" style="display: none;">🔒</a>
+                </div>
+            </div>
         </nav>
     </header>
-
     <main>
-        <section id="coming-soon-message" class="container" style="text-align: center; padding: 5rem 0;">
+        <section id="coming-soon-message" class="container">
             <h2 class="section-title">Iniciar Sesión</h2>
             <p style="font-size: 1.2rem;">La funcionalidad de inicio de sesión estará disponible pronto.</p>
             <p style="font-size: 1.2rem;">Por favor, regístrate para acceder a los beneficios y descuentos exclusivos.</p>
@@ -37,9 +53,22 @@
         </section>
     </main>
 
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="section-title">Tu Carrito</h2>
+            <div id="cart-items"></div>
+            <div class="cart-summary">
+                <p>Total: <span id="cart-total">$0 CLP</span></p>
+                <button id="checkout-btn" class="btn-submit">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
     <footer class="footer">
         <p>&copy; 2025 Pastelería Mil Sabores. Todos los derechos reservados.</p>
     </footer>
+    
+    <script src="js/script.js"></script>
 
 </body>
 </html>

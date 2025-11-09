@@ -34,6 +34,7 @@ function renderProducts(filteredProducts = products) {
     });
 }
 
+// Lógica de actualización del carrito ahora para el modal
 function updateCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalElement = document.getElementById('cart-total');
@@ -43,14 +44,22 @@ function updateCart() {
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p>El carrito está vacío.</p>';
+        document.getElementById('checkout-btn').disabled = true;
     } else {
+        document.getElementById('checkout-btn').disabled = false;
         cart.forEach(item => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
-            const personalizationText = item.personalization ? ` <br> (Mensaje: ${item.personalization})` : '';
+            // Botón de eliminar para el item del carrito
             cartItem.innerHTML = `
-                <p>${item.name} x ${item.quantity}${personalizationText}</p>
-                <p>$${(item.price * item.quantity).toLocaleString('es-CL')} CLP</p>
+                <div>
+                    <p>${item.name} x ${item.quantity}</p>
+                    ${item.personalization ? `<p style="font-size:0.9rem; color: #888;">(Mensaje: ${item.personalization})</p>` : ''}
+                </div>
+                <div>
+                    <p>$${(item.price * item.quantity).toLocaleString('es-CL')} CLP</p>
+                    <button class="remove-item-btn" data-code="${item.code}" data-personalization="${item.personalization || ''}">X</button>
+                </div>
             `;
             cartItemsContainer.appendChild(cartItem);
             total += item.price * item.quantity;
@@ -58,10 +67,33 @@ function updateCart() {
     }
 
     cartTotalElement.textContent = `$${total.toLocaleString('es-CL')} CLP`;
+    
+    // Añadir listeners para eliminar productos
+    document.querySelectorAll('.remove-item-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const code = e.target.dataset.code;
+            const personalization = e.target.dataset.personalization;
+            removeItemFromCart(code, personalization);
+        });
+    });
 }
 
+function removeItemFromCart(code, personalization) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    const indexToRemove = cart.findIndex(item => item.code === code && (item.personalization || '') === personalization);
+
+    if (indexToRemove !== -1) {
+        cart.splice(indexToRemove, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart(); // Volver a renderizar el carrito
+    }
+}
+
+
 function filterAndSearchProducts() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    // Usamos el input de búsqueda del header
+    const searchTerm = document.getElementById('header-search-input').value.toLowerCase();
     const selectedCategory = document.getElementById('category-filter').value;
     
     const filtered = products.filter(product => {
@@ -74,7 +106,8 @@ function filterAndSearchProducts() {
 }
 
 document.getElementById('category-filter').addEventListener('change', filterAndSearchProducts);
-document.getElementById('search-input').addEventListener('input', filterAndSearchProducts);
+// Listener para el input de búsqueda del header
+document.getElementById('header-search-input').addEventListener('input', filterAndSearchProducts);
 
 function generateTrackingNumber() {
     return 'PS-' + Math.floor(10000000 + Math.random() * 90000000);
@@ -93,7 +126,10 @@ document.getElementById('checkout-btn').addEventListener('click', () => {
 
         localStorage.setItem('lastOrder', JSON.stringify(orderData));
         localStorage.setItem('cart', JSON.stringify([]));
-        updateCart();
+        
+        // Cierra el modal y actualiza la vista
+        document.getElementById('cart-modal').style.display = 'none';
+        updateCart(); 
 
         alert(`¡Gracias por tu compra! Tu pedido ha sido confirmado. Número de seguimiento: ${trackingNumber}`);
         
@@ -126,28 +162,51 @@ function toggleProfileButton() {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const isAdmin = user.email === 'admin@pasteleria.cl';
     
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const profileLink = document.getElementById('profile-link');
+    // Obtenemos los nuevos íconos del header
+    const loginIcon = document.getElementById('header-login-icon');
+    const profileIcon = document.getElementById('header-profile-icon');
     const adminLink = document.getElementById('admin-link');
-
+    
     if (isLoggedIn) {
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
-        profileLink.style.display = 'list-item'; 
+        loginIcon.style.display = 'none';
+        profileIcon.style.display = 'inline-flex'; 
         if (isAdmin) {
-            adminLink.style.display = 'list-item';
+            adminLink.style.display = 'inline-flex';
+        } else {
+            adminLink.style.display = 'none';
         }
     } else {
-        loginBtn.style.display = 'list-item';
-        registerBtn.style.display = 'list-item';
-        profileLink.style.display = 'none';
+        loginIcon.style.display = 'inline-flex';
+        profileIcon.style.display = 'none';
         adminLink.style.display = 'none';
+    }
+}
+
+// Lógica para mostrar/ocultar el modal del carrito
+function setupCartModal() {
+    const cartModal = document.getElementById('cart-modal');
+    const cartIcon = document.getElementById('header-cart-icon');
+    const closeBtn = document.querySelector('.close-btn');
+
+    cartIcon.onclick = function() {
+        updateCart(); // Asegurarse de que el carrito esté actualizado antes de mostrar
+        cartModal.style.display = 'block';
+    }
+
+    closeBtn.onclick = function() {
+        cartModal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == cartModal) {
+            cartModal.style.display = 'none';
+        }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
-    updateCart();
-    toggleProfileButton();
+    updateCart(); // Inicializa el carrito
+    toggleProfileButton(); // Muestra el ícono correcto
+    setupCartModal(); // Configura la funcionalidad del modal
 });

@@ -12,33 +12,63 @@
 <body>
 
     <header class="header">
+        <nav class="navbar left-nav">
+            <ul>
+                <li><a href="#catalogo">Catálogo</a></li>
+                <li><a href="#nosotros">Nuestra Historia</a></li>
+                <li><a href="#blog">Blog</a></li>
+            </ul>
+        </nav>
+
         <div class="logo">
             <a href="index.html">
                 <img src="img/Logo.png" alt="Pastelería Mil Sabores Logo">
             </a>
         </div>
-        <nav class="navbar">
-            <ul>
-                <li><a href="#catalogo">Catálogo</a></li>
-                <li><a href="#nosotros">Nuestra Historia</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li id="login-btn"><a href="login-coming-soon.html" class="btn-login">Iniciar Sesión</a></li>
-                <li id="register-btn"><a href="register.html" class="btn-register">Registrarse</a></li>
-                <li id="profile-link" style="display: none;"><a href="profile.html" class="btn-profile">Mi Perfil</a></li>
-                <li id="admin-link" style="display: none;"><a href="admin-panel.html" class="btn-profile">Admin</a></li>
-            </ul>
+        
+        <nav class="navbar right-nav">
+            <div class="search-and-icons">
+                <div class="search-bar">
+                    <input type="text" id="header-search-input" placeholder="Buscar producto" class="search-input-header">
+                    <button class="search-icon">🔍</button>
+                </div>
+
+                <div class="user-icons">
+                    <a href="profile.html" id="header-profile-icon" class="icon-link icon-profile" style="display: none;">👤</a>
+                    <a href="login-coming-soon.html" id="header-login-icon" class="icon-link icon-profile">👤</a>
+
+                    <a href="#" id="header-cart-icon" class="icon-link icon-cart">🛒</a>
+                    
+                    <a href="admin-panel.html" id="admin-link" class="icon-link icon-admin" style="display: none;">🔒</a>
+                </div>
+            </div>
         </nav>
     </header>
 
     <main>
         <section id="hero">
-            <h1>¡Celebra la dulzura de la vida con Pastelería Mil Sabores!</h1>
-            <p>Estamos emocionados de compartir nuestras delicias contigo. Descubre, saborea y crea momentos inolvidables con nosotros.</p>
-            <div class="social-share">
-                <button id="share-btn" class="btn-share">Compartir en Redes Sociales</button>
+            <div id="hero-content">
+                <h1>¡Celebra la dulzura de la vida con Pastelería Mil Sabores!</h1>
+                <p>Descubre nuestros ingredientes de alta calidad y encarga tu torta especial para crear momentos inolvidables.</p>
+                <div class="social-share">
+                    <button id="share-btn" class="btn-share">Compartir en Redes Sociales</button>
+                </div>
             </div>
         </section>
-
+        
+        <section id="info-blocks">
+            <div id="discount-block" class="info-block">
+                <h3>10% de dcto. por compras superiores a $50.000</h3>
+                <p>CÓDIGO: **MIL_SABORES10**</p>
+                <p style="font-size: 0.9rem;">(Envío gratis a partir de $80.000 en compras)</p>
+            </div>
+            <div id="special-print-block" class="info-block">
+                <h3>Encarga tu impresión comestible</h3>
+                <p>Personaliza tus tortas con el diseño que quieras</p>
+                <p>Disponible en papel de arroz o azúcar.</p>
+            </div>
+        </section>
+        
         <section id="nosotros" class="container">
             <h2 class="section-title">Nuestra Historia</h2>
             <p>Pastelería Mil Sabores celebra su 50 aniversario como un referente en la repostería chilena. Desde nuestros humildes comienzos hasta hoy, hemos mantenido la tradición y la calidad en cada uno de nuestros productos.</p>
@@ -49,7 +79,6 @@
         <section id="catalogo" class="container">
             <h2 class="section-title">Nuestro Catálogo</h2>
             <div class="filters">
-                <input type="text" id="search-input" placeholder="Buscar por nombre...">
                 <select id="category-filter">
                     <option value="">Todas las Categorías</option>
                     <option value="Tortas Cuadradas">Tortas Cuadradas</option>
@@ -66,15 +95,17 @@
                 </div>
         </section>
 
-        <section id="cart-section" class="container">
-            <h2 class="section-title">Carrito de Compras</h2>
-            <div id="cart-items">
+        <div id="cart-modal" class="cart-modal">
+            <div class="cart-content">
+                <span class="close-btn">&times;</span>
+                <h2 class="section-title">Tu Carrito</h2>
+                <div id="cart-items"></div>
+                <div class="cart-summary">
+                    <p>Total: <span id="cart-total">$0 CLP</span></p>
+                    <button id="checkout-btn" class="btn-submit">Finalizar Compra</button>
                 </div>
-            <div class="cart-summary">
-                <p>Total: <span id="cart-total">$0 CLP</span></p>
-                <button id="checkout-btn">Finalizar Compra</button>
             </div>
-        </section>
+        </div>
 
         <section id="blog" class="container">
             <h2 class="section-title">Blog y Comunidad</h2>
